@@ -1,0 +1,16 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/python.Dockerfile
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+
+  rust_engine:
+    build:
+      context: .
+      dockerfile: docker/rust.Dockerfile
+    volumes:
+      - ./rust_engine:/usr/src/rust_engine
