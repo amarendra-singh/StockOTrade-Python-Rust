@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, func, UniqueConstraint
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.postgresql import UUID
 import uuid
+
 
 Base = declarative_base()
 
@@ -16,3 +18,6 @@ class User(Base):
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, uuid={self.uuid}, username={self.username}, email={self.email})>"
