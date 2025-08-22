@@ -1,9 +1,10 @@
-from pydantic import BaseModel, EmailStr, constr, Field, root_validator
-from typing import Optional
+from __future__ import annotations
+from typing import Optional, Annotated
 from uuid import UUID
 from datetime import datetime
-import re
 
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
+from pydantic.types import constr
 
 class UserBase(BaseModel):
     username: constr(strip_whitespace=True, min_length=3, max_length=50) = Field(
@@ -11,6 +12,13 @@ class UserBase(BaseModel):
     )
     email: EmailStr = Field(..., description= "Valid email address")
     full_name: Optional[str] = Field(None, description= "Full name of the user")
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email (cls, v: EmailStr) -> EmailStr:
+        return Email(v.lower())
+
+
 
 class UserCreate(UserBase):
     password: constr(min_length=8, max_length=128) = Field(
